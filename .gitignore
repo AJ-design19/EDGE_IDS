@@ -1,0 +1,9 @@
+
+# Local dependencies and secrets
+Backend/venv/
+ids/node_modules/
+ids/.next/
+.env
+Backend/.env
+__pycache__/
+.DS_Store

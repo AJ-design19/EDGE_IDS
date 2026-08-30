@@ -1,0 +1,33 @@
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Environment variables
+.env
+
+# Logs
+*.log
+
+# Model / dataset artifacts
+*.npy
+*.pkl
+*.joblib
+*.h5
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Python build files
+build/
+dist/
+*.egg-info/
+
+# Test cache
+.pytest_cache/
