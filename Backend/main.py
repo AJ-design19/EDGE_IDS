@@ -118,3 +118,43 @@ if __name__ == "__main__":
         host="0.0.0.0",
         port=7001
     )
+# ── MITRE ATT&CK Mapping ──────────────
+MITRE_MAP = {
+    "Port Scan"        : ("TA0043", "Reconnaissance"),
+    "Reconnaissance"   : ("TA0043", "Reconnaissance"),
+    "Brute Force SSH"  : ("TA0001", "Initial Access"),
+    "DDoS HTTP Flood"  : ("TA0040", "Impact"),
+    "DDoS UDP Flood"   : ("TA0040", "Impact"),
+    "Mirai Botnet"     : ("TA0011", "Command & Control"),
+    "DNS Amplification": ("TA0040", "Impact"),
+    "ARP Spoofing"     : ("TA0006", "Credential Access"),
+    "MQTT Exploit"     : ("TA0001", "Initial Access"),
+    "Anomalous Traffic": ("TA0007", "Discovery"),
+}
+
+def get_mitre_stage(attack_type: str):
+    return MITRE_MAP.get(
+        attack_type,
+        ("TA0000", "Unknown")
+    )
+
+# ── K-Step Forward Prediction ─────────
+def predict_k_steps(features, k: int = 5):
+    predictions = []
+    current = features.copy()
+    for step in range(k):
+        prob, lat = predict_one(current)
+        atype, sev = get_attack_type(prob)
+        mitre_id, mitre_stage = \
+            get_mitre_stage(atype)
+        predictions.append({
+            "step"        : step + 1,
+            "prob"        : round(prob, 4),
+            "is_attack"   : prob > 0.5,
+            "attack_type" : atype,
+            "severity"    : sev,
+            "mitre_id"    : mitre_id,
+            "mitre_stage" : mitre_stage,
+            "latency_ms"  : round(lat, 2),
+        })
+    return predictions
